@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d2219">
+<title>Calendrier de l'Avent</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon fill='%23f0d48a' points='50,4 61,38 97,38 68,59 79,94 50,73 21,94 32,59 3,38 39,38'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vert:#173f2e; --vert2:#1f5c40; --vert3:#245f45; --rouge:#8c161e; --rouge2:#a51d27;
+  --or:#d4aa50; --or2:#f0d48a; --creme:#faf4e6; --nuit:#0d2219;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:Inter,system-ui,sans-serif;color:var(--creme);
+  background:radial-gradient(ellipse at 50% -10%,#2b6b4d 0%,var(--vert) 45%,var(--nuit) 100%) fixed;
+  overflow-x:hidden;
+}
+#neige{position:fixed;inset:0;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:28px 16px 120px;overflow:hidden}
+[hidden]{display:none!important}
+
+/* En-tête */
+header{text-align:center;margin-bottom:26px}
+.etoile{width:46px;height:46px;margin:0 auto 6px;filter:drop-shadow(0 0 12px rgba(240,212,138,.6));animation:briller 3s ease-in-out infinite}
+@keyframes briller{50%{filter:drop-shadow(0 0 22px rgba(240,212,138,.95))}}
+h1{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(2rem,7vw,3.3rem);color:var(--or2);letter-spacing:.02em;line-height:1.05}
+.sous{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.25rem;color:var(--creme);opacity:.85;margin-top:6px}
+.compte{display:inline-block;margin-top:14px;padding:6px 16px;border:1px solid rgba(212,170,80,.5);border-radius:99px;font-size:.85rem;color:var(--or2);background:rgba(0,0,0,.18)}
+
+/* Grille des portes */
+.grille{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media(min-width:700px){.grille{grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}}
+.case{position:relative;aspect-ratio:1/1.12;perspective:900px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.fond{position:absolute;inset:0;border-radius:10px;overflow:hidden;
+  background:linear-gradient(160deg,var(--or2),var(--or));display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 0 18px rgba(0,0,0,.35)}
+.fond svg{width:46%;opacity:.9}
+.porte{position:absolute;inset:0;border-radius:10px;transform-origin:left center;
+  transition:transform .9s cubic-bezier(.3,.7,.2,1),box-shadow .3s;
+  background:var(--vert2);border:2px solid var(--or);
+  box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px var(--vert2),inset 0 0 0 5px rgba(212,170,80,.55);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;
+  background-image:radial-gradient(rgba(255,255,255,.07) 1.5px,transparent 1.6px);background-size:14px 14px}
+.case:nth-child(even) .porte{background-color:var(--vert3);box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px var(--vert3),inset 0 0 0 5px rgba(212,170,80,.55)}
+.case.gros .porte{background-color:var(--rouge);box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 0 0 4px var(--rouge),inset 0 0 0 5px rgba(212,170,80,.55)}
+.num{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(1.8rem,7vw,2.6rem);color:var(--creme);line-height:1;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+.poignee{position:absolute;right:9px;top:50%;width:7px;height:7px;border-radius:50%;background:var(--or);box-shadow:0 0 4px rgba(0,0,0,.4)}
+.mini{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--or2);margin-top:4px;opacity:.9}
+.cadenas{position:absolute;top:7px;right:7px;width:14px;opacity:.55}
+.case.ouverte .porte{transform:rotateY(-108deg);box-shadow:-8px 6px 14px rgba(0,0,0,.4)}
+.case.dispo .porte{animation:appel 2.2s ease-in-out infinite}
+@keyframes appel{0%,100%{box-shadow:0 6px 14px rgba(0,0,0,.35),0 0 0 0 rgba(240,212,138,0)}50%{box-shadow:0 6px 14px rgba(0,0,0,.35),0 0 22px 4px rgba(240,212,138,.75)}}
+.case.verrou .porte{filter:saturate(.75) brightness(.85)}
+.case.secoue{animation:secoue .45s}
+@keyframes secoue{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+
+/* Fiche cadeau */
+.voile{position:fixed;inset:0;background:rgba(5,15,10,.72);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;z-index:10}
+@media(min-width:700px){.voile{align-items:center}}
+.voile.on{display:flex}
+.carte{width:100%;max-width:520px;max-height:92vh;overflow:auto;background:var(--creme);color:#2a2a2a;border-radius:18px 18px 0 0;animation:monte .45s cubic-bezier(.2,.8,.2,1)}
+@media(min-width:700px){.carte{border-radius:18px}}
+@keyframes monte{from{transform:translateY(40px);opacity:0}}
+.bandeau{height:200px;position:relative;display:flex;align-items:flex-end;padding:18px 22px;color:var(--creme);
+  background:linear-gradient(135deg,var(--vert2),var(--nuit));background-size:cover;background-position:center}
+.bandeau.gros{background-image:linear-gradient(135deg,var(--rouge2),#3d0a0e)}
+.bandeau svg.deco{position:absolute;right:18px;top:18px;width:90px;opacity:.85}
+.bandeau.img svg.deco{display:none}
+.bandeau .jour{font-family:'Cormorant Garamond',serif;font-size:4.2rem;font-weight:700;line-height:.8;color:var(--or2);margin-right:14px;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+.bandeau .titre{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;line-height:1.05;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.bandeau .date{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;opacity:.9;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.corps{padding:22px}
+.accroche{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;color:var(--vert2);margin-bottom:12px;line-height:1.3}
+.texte{line-height:1.6;font-size:.98rem}
+.texte p+p{margin-top:8px}
+.grandephoto{width:100%;border-radius:12px;margin:14px 0 4px;display:block;box-shadow:0 6px 16px rgba(0,0,0,.18);background:#e6dcc4;min-height:120px;object-fit:cover}
+.code{margin:18px 0 4px;border:2px dashed var(--or);border-radius:12px;padding:14px;text-align:center;background:#fff9ea}
+.code small{display:block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#8a7a50}
+.code b{display:block;font-size:1.5rem;letter-spacing:.1em;color:var(--rouge);margin:6px 0 8px;font-family:ui-monospace,Menlo,monospace;word-break:break-all}
+.btn{display:inline-block;border:0;border-radius:99px;padding:12px 22px;font:600 .95rem Inter,sans-serif;cursor:pointer;text-decoration:none}
+.btn.or{background:var(--or);color:var(--nuit)}
+.btn.vert{background:var(--vert2);color:var(--creme);width:100%;margin-top:18px;text-align:center}
+.btn.leger{background:transparent;color:var(--vert2);width:100%;margin-top:8px}
+.btn.petit{padding:6px 14px;font-size:.8rem;background:var(--vert2);color:var(--creme)}
+
+/* Carrousel */
+.carrou{position:relative;margin:4px -22px 6px}
+.piste{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.piste::-webkit-scrollbar{display:none}
+.diapo{flex:0 0 100%;scroll-snap-align:center;padding:0 22px}
+.photo{width:100%;aspect-ratio:4/3;border-radius:12px;display:block;object-fit:cover;background:#e6dcc4;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.legende{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--vert2);text-align:center;margin-top:8px;min-height:1.4em;padding:0 22px}
+.points{display:flex;justify-content:center;gap:7px;margin-top:6px}
+.points i{width:8px;height:8px;border-radius:50%;background:#d8cdb4;transition:.25s}
+.points i.on{background:var(--or);width:20px;border-radius:99px}
+.fleche{position:absolute;top:34%;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.85);color:var(--vert);font-size:1.2rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fleche.g{left:30px}.fleche.d{right:30px}
+
+/* Quiz */
+.paliers{position:relative;margin:8px 20px 22px 6px;height:44px}
+.rail{position:absolute;left:0;right:0;top:18px;height:8px;border-radius:99px;background:#e6dcc4;overflow:hidden}
+.rail b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--vert2),var(--or));transition:width .5s}
+.jalon{position:absolute;top:4px;transform:translateX(-50%);text-align:center;font-size:.7rem;color:#8a7a50}
+.jalon .ico{width:34px;height:34px;border-radius:50%;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;background:#efe6d0;border:2px solid #d8cdb4;transition:.35s}
+.jalon .ico svg{width:18px;opacity:.45}
+.jalon.ok .ico{background:var(--or);border-color:var(--or);transform:scale(1.12);box-shadow:0 0 12px rgba(212,170,80,.7)}
+.jalon.ok .ico svg{opacity:1}
+.jalon.ok{color:var(--vert2);font-weight:600}
+.question{font-weight:600;font-size:1.02rem;margin:4px 0 12px}
+.qnum{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#8a7a50}
+.choix{display:block;width:100%;text-align:left;border:1.5px solid #d8cdb4;background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;font:inherit;color:inherit;cursor:pointer;transition:.2s}
+.choix.bon{border-color:#2e8b57;background:#e8f5ec}
+.choix.faux{border-color:var(--rouge);background:#fbeaea;opacity:.6}
+.qimg{width:100%;aspect-ratio:16/9;border-radius:12px;margin:2px 0 12px;display:block;object-fit:cover;background:#e6dcc4}
+.lot{border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;border:1.5px solid #d8cdb4}
+.lot.ok{border-color:var(--or);background:#fff9ea}
+.lot.non{opacity:.45;filter:grayscale(1)}
+.lot .seuil{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--rouge);min-width:44px;text-align:center}
+.lot small{display:block;color:#8a7a50;font-size:.8rem;margin-top:2px}
+.lot .code{margin:10px 0 0;padding:10px}
+.lot .code b{font-size:1.15rem}
+.lot .btn.vert{margin-top:10px;padding:9px 16px;font-size:.85rem}
+.lot>div:last-child{flex:1;min-width:0}
+.final{text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--rouge);margin:6px 0 14px;line-height:1.2}
+
+/* Grille de mentalisme */
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 14px}
+.mg .cel{position:relative;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:#e6dcc4;transition:opacity .8s,transform .8s,filter .8s}
+.mg .cel img{width:100%;height:100%;object-fit:cover;display:block}
+.mg .cel span{position:absolute;left:0;right:0;bottom:0;padding:14px 6px 5px;font-size:.68rem;line-height:1.15;color:#fff;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.mg .cel.coin{box-shadow:0 0 0 3px var(--or)}
+.mg .cel.parti{opacity:.08;transform:scale(.85);filter:grayscale(1)}
+.mg .cel.elue{box-shadow:0 0 0 4px var(--or),0 0 24px rgba(212,170,80,.9);transform:scale(1.04)}
+.consigne{background:#fff9ea;border:1.5px solid var(--or);border-radius:12px;padding:14px;line-height:1.5;font-size:.96rem}
+.consigne .ok{margin-top:12px;width:100%}
+.retrait{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:var(--rouge);margin-bottom:8px;line-height:1.3}
+
+/* Message flottant */
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--creme);color:var(--vert);padding:12px 20px;border-radius:99px;font-size:.92rem;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:.3s;z-index:20;max-width:92vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Écran du mot secret */
+#verrouGlobal{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 50% 30%,#2b6b4d,var(--nuit))}
+.boite{width:100%;max-width:360px;text-align:center}
+.boite h2{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--or2);margin:10px 0 4px}
+.boite p{opacity:.85;font-size:.92rem;margin-bottom:18px}
+.boite input[type=password]{width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid var(--or);background:rgba(0,0,0,.25);color:var(--creme);font:1rem Inter,sans-serif;text-align:center;margin-bottom:12px}
+.boite input::placeholder{color:rgba(250,244,230,.5)}
+.boite .btn{width:100%}
+.boite label{display:flex;gap:8px;align-items:center;justify-content:center;font-size:.82rem;opacity:.8;margin-top:12px}
+.erreur{color:#ffb3b3;font-size:.88rem;min-height:1.3em;margin-top:10px}
+
+/* Barre de test */
+.barretest{position:fixed;left:0;right:0;bottom:0;z-index:5;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);padding:10px 16px;display:flex;gap:12px;align-items:center;justify-content:center;font-size:.8rem;flex-wrap:wrap;border-top:1px solid rgba(212,170,80,.35)}
+.barretest input[type=range]{width:min(300px,48vw);accent-color:var(--or)}
+.barretest b{color:var(--or2)}
+.barretest button{background:transparent;border:1px solid var(--or);color:var(--or2);border-radius:99px;padding:4px 10px;font-size:.75rem;cursor:pointer}
+@media (prefers-reduced-motion:reduce){#neige{display:none}.case.dispo .porte,.etoile{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="neige"></canvas>
+
+<div id="verrouGlobal">
+  <form class="boite" id="formMdp" autocomplete="off">
+    <svg class="etoile" viewBox="0 0 100 100"><polygon fill="#f0d48a" points="50,4 61,38 97,38 68,59 79,94 50,73 21,94 32,59 3,38 39,38"/></svg>
+    <h2>Calendrier de l'Avent</h2>
+    <p>Un mot que toi seule connais ouvre la porte du calendrier.</p>
+    <input id="mdp" type="password" placeholder="Le mot secret" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go">
+    <button class="btn or" type="submit" id="btnEntrer">Entrer</button>
+    <label><input type="checkbox" id="garderMdp" checked> Rester connectée sur ce téléphone</label>
+    <div class="erreur" id="erreur"></div>
+  </form>
+</div>
+
+<div class="wrap" id="appli" hidden>
+  <header>
+    <svg class="etoile" viewBox="0 0 100 100"><polygon fill="#f0d48a" points="50,4 61,38 97,38 68,59 79,94 50,73 21,94 32,59 3,38 39,38"/></svg>
+    <h1>Calendrier de l'Avent</h1>
+    <div class="sous">Une porte s'ouvre chaque nuit à minuit</div>
+    <div class="compte" id="compte"></div>
+  </header>
+  <main class="grille" id="grille"></main>
+</div>
+
+<div class="voile" id="voile"><div class="carte" id="carte"></div></div>
+<div class="toast" id="toast"></div>
+
+<div class="barretest" id="barreTest" hidden>
+  <span>Test · simuler le</span>
+  <input type="range" id="sim" min="0" max="24" value="0">
+  <b id="simLib"></b>
+  <button type="button" id="raz">Tout remettre à zéro</button>
+</div>
+
+<script>
+'use strict';
+/* ====== Réglages fixes ====== */
+const ORDRE=[13,7,21,2,18,10,4,16,1,23,9,15,6,20,11,3,24,14,8,19,5,12,22,17]; // disposition mélangée
+const MOIS=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+const JS=["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+const PREFIXE='avent-';
+
+/* ====== Stockage local (sans jamais planter) ====== */
+const lire=(k,def)=>{try{const v=localStorage.getItem(PREFIXE+k);return v===null?def:JSON.parse(v)}catch(e){return def}};
+const ecrire=(k,v)=>{try{localStorage.setItem(PREFIXE+k,JSON.stringify(v))}catch(e){}};
+const effacer=k=>{try{localStorage.removeItem(PREFIXE+k)}catch(e){}};
+
+/* ====== Chiffrement : PBKDF2-SHA256 + AES-256-GCM ======
+   Format d'un bloc chiffré : IV (12 octets) | texte chiffré | étiquette (16 octets) */
+let CLE=null, DONNEES=null;
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const normaliser=m=>m.normalize('NFC').trim().toLowerCase();
+async function deriverCle(mdp,sel,iter){
+  const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(normaliser(mdp)),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt:sel,iterations:iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+}
+async function dechiffrer(octets){
+  const u=new Uint8Array(octets);
+  return crypto.subtle.decrypt({name:'AES-GCM',iv:u.slice(0,12)},CLE,u.slice(12));
+}
+async function ouvrirContenu(mdp){
+  const r=await fetch('contenu.chiffre',{cache:'no-store'});
+  if(!r.ok) throw new Error('absent');
+  const f=await r.json();
+  CLE=await deriverCle(mdp,b64(f.sel),f.iter);
+  let clair;
+  try{clair=await dechiffrer(b64(f.donnees))}catch(e){CLE=null;throw new Error('mdp')}
+  return JSON.parse(new TextDecoder().decode(clair));
+}
+const IMAGES=new Map();
+function image(id){
+  if(!id) return Promise.resolve(null);
+  if(!IMAGES.has(id)) IMAGES.set(id,(async()=>{
+    const r=await fetch(id); if(!r.ok) throw new Error(id);
+    const clair=await dechiffrer(await r.arrayBuffer());
+    return URL.createObjectURL(new Blob([clair],{type:'image/jpeg'}));
+  })().catch(e=>{IMAGES.delete(id);return null}));
+  return IMAGES.get(id);
+}
+function hydrater(zone){
+  zone.querySelectorAll('img[data-img]').forEach(async el=>{const u=await image(el.dataset.img); if(u) el.src=u});
+}
+
+/* ====== Outils ====== */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const paragraphes=s=>String(s||'').split(/\r?\n+/).map(l=>l.trim()).filter(Boolean).map(l=>`<p>${esc(l)}</p>`).join('');
+const lienSur=u=>/^https?:\/\//i.test(u||'')?u:'';
+const svgEtoile=c=>`<svg viewBox="0 0 100 100"><polygon fill="${c}" points="50,4 61,38 97,38 68,59 79,94 50,73 21,94 32,59 3,38 39,38"/></svg>`;
+const svgCadenas=`<svg class="cadenas" viewBox="0 0 24 24" fill="none" stroke="#f0d48a" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`;
+const htmlCode=c=>c?`<div class="code"><small>Ton code</small><b>${esc(c)}</b><button class="btn petit" data-copier="${esc(c)}">Copier</button></div>`:'';
+const htmlLien=(u,b)=>lienSur(u)?`<a class="btn vert" href="${esc(lienSur(u))}" target="_blank" rel="noopener">${esc(b||'Ouvrir')}</a>`:'';
+let tt; function toast(m,duree){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),duree||2400)}
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-copier]'); if(!b) return;
+  try{await navigator.clipboard.writeText(b.dataset.copier);b.textContent='Copié ✓'}catch(err){b.textContent='Sélectionne le code'}
+});
+
+/* ====== Date du jour (heure de Paris) ====== */
+function jourReel(){
+  const p={};new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',year:'numeric',month:'numeric',day:'numeric'})
+    .formatToParts(new Date()).forEach(x=>p[x.type]=+x.value);
+  const an=DONNEES.annee;
+  if(p.year<an||(p.year===an&&p.month<12)) return 0;
+  if(p.year>an) return 24;
+  return Math.min(p.day,24);
+}
+let JOUR=0;
+const jourCourant=()=>DONNEES.test?JOUR:jourReel();
+
+/* ====== Calendrier ====== */
+let vues=new Set();
+function dessiner(){
+  const jour=jourCourant(), g=document.getElementById('grille'); g.innerHTML='';
+  ORDRE.forEach(n=>{
+    const d=DONNEES.jours[n]||{}, etat=n<=jour?(vues.has(n)?'ouverte':'dispo'):'verrou';
+    const el=document.createElement('div');
+    el.className=`case ${etat}${d.gros?' gros':''}`;
+    el.innerHTML=`<div class="fond">${svgEtoile(d.gros?'#a51d27':'#1f5c40')}</div>
+      <div class="porte"><span class="num">${n}</span>${d.gros?'<span class="mini">surprise</span>':''}
+      <span class="poignee"></span>${etat==='verrou'?svgCadenas:''}</div>`;
+    el.onclick=()=>clic(n,el);
+    g.appendChild(el);
+  });
+  const reste=24-jour;
+  document.getElementById('compte').textContent = jour===0 ? "Le calendrier s'ouvre le 1er décembre"
+    : reste===0 ? "Joyeux Noël" : `Encore ${reste} porte${reste>1?'s':''} avant Noël`;
+  if(DONNEES.test) document.getElementById('simLib').textContent = jour===0 ? "30 novembre" : `${jour} décembre`;
+}
+function clic(n,el){
+  if(n>jourCourant()){
+    el.classList.remove('secoue'); void el.offsetWidth; el.classList.add('secoue');
+    toast(`Patience… cette porte s'ouvre le ${n} décembre`); return;
+  }
+  const premiere=!vues.has(n);
+  vues.add(n); ecrire('vues',[...vues]);
+  el.classList.remove('dispo'); el.classList.add('ouverte');
+  setTimeout(()=>ouvrirCase(n), premiere?750:0);
+}
+function ouvrirCase(n){
+  const d=DONNEES.jours[n]||{titre:'Bientôt',accroche:'Cette case se prépare encore.'};
+  const dt=new Date(DONNEES.annee,11,n);
+  const carte=document.getElementById('carte');
+  carte.innerHTML=`
+    <div class="bandeau${d.gros?' gros':''}" id="bandeau">${svgEtoile('#f0d48a').replace('<svg','<svg class="deco"')}
+      <div class="jour">${n}</div><div><div class="titre">${esc(d.titre)}</div><div class="date">${JS[dt.getDay()]} ${n} décembre</div></div></div>
+    <div class="corps">
+      ${d.accroche?`<div class="accroche">${esc(d.accroche)}</div>`:''}
+      <div class="texte">${paragraphes(d.texte)}</div>
+      ${d.photo?`<img class="grandephoto" alt="" data-img="${esc(d.photo)}">`:''}
+      ${d.carrousel?htmlCarrou(d.carrousel):''}
+      ${d.quiz?'<div id="quiz"></div>':''}
+      ${d.grille?'<div id="mental"></div>':''}
+      ${htmlCode(d.code)}
+      ${htmlLien(d.lien,d.bouton)}
+      <button class="btn leger" id="btnFermer">Retour au calendrier</button>
+    </div>`;
+  carte.scrollTop=0;
+  document.getElementById('voile').classList.add('on');
+  document.getElementById('btnFermer').onclick=fermer;
+  if(d.image) image(d.image).then(u=>{
+    const b=document.getElementById('bandeau'); if(!u||!b) return;
+    b.classList.add('img');
+    b.style.backgroundImage=`linear-gradient(to top,rgba(0,0,0,.7),rgba(0,0,0,.05) 60%),url("${u}")`;
+  });
+  if(d.carrousel) initCarrou(d.carrousel);
+  if(d.quiz) initQuiz(d.quiz,n);
+  if(d.grille) initGrille(d.grille);
+  hydrater(carte);
+}
+function fermer(){document.getElementById('voile').classList.remove('on')}
+document.getElementById('voile').onclick=e=>{if(e.target.id==='voile')fermer()};
+
+/* ====== Carrousel ====== */
+function htmlCarrou(L){
+  return `<div class="carrou"><div class="piste" id="piste">${L.map(p=>`<div class="diapo"><img class="photo" alt="" data-img="${esc(p.img)}"></div>`).join('')}</div>
+   ${L.length>1?'<button class="fleche g" data-sens="-1">‹</button><button class="fleche d" data-sens="1">›</button>':''}
+   <div class="legende" id="legende">${esc(L[0].leg)}</div>
+   <div class="points" id="points">${L.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div></div>`;
+}
+function initCarrou(L){
+  const pi=document.getElementById('piste');
+  pi.onscroll=()=>{const i=Math.max(0,Math.min(L.length-1,Math.round(pi.scrollLeft/pi.clientWidth)));
+    document.getElementById('legende').textContent=L[i].leg||'';
+    [...document.getElementById('points').children].forEach((e,k)=>e.classList.toggle('on',k===i))};
+  document.querySelectorAll('.fleche').forEach(b=>b.onclick=()=>pi.scrollBy({left:+b.dataset.sens*pi.clientWidth,behavior:'smooth'}));
+}
+
+/* ====== Quiz à paliers ====== */
+const icoCadeau=`<svg viewBox="0 0 24 24" fill="none" stroke="#173f2e" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M12 8v13M3 12h18M12 8c-2-4-6-4-6-1s6 1 6 1c0 0 6 2 6-1s-4-3-6 1"/></svg>`;
+function initQuiz(Q,n){
+  const N=Q.questions.length, P=[...Q.paliers].sort((a,b)=>a.s-b.s), cle='quiz-'+n;
+  let {i=0,score=0}=lire(cle,{});
+  const z=document.getElementById('quiz');
+  const garder=()=>ecrire(cle,{i,score});
+  const rail=tout=>`<div class="paliers"><div class="rail"><b style="width:${(tout?N:score)/N*100}%"></b></div>
+    ${P.map(p=>`<div class="jalon ${tout||score>=p.s?'ok':''}" style="left:${p.s/N*100}%"><div class="ico">${icoCadeau}</div>${p.s}/${N}</div>`).join('')}</div>`;
+  const lot=(p,ok)=>ok
+    ?`<div class="lot ok"><div class="seuil">${p.s}</div><div><b>${esc(p.titre)}</b>${p.texte?`<small>${esc(p.texte)}</small>`:''}${htmlCode(p.code)}${htmlLien(p.lien,p.bouton)}</div></div>`
+    :`<div class="lot non"><div class="seuil">${p.s}</div><div><b>Cadeau perdu</b><small>Il fallait ${p.s} bonnes réponses</small></div></div>`;
+  function question(){
+    if(i>=N) return fin(false);
+    const q=Q.questions[i];
+    z.innerHTML=rail()+(q.img?`<img class="qimg" alt="" data-img="${esc(q.img)}">`:'')+
+      `<div class="qnum">Question ${i+1} / ${N} · ${score} bonne${score>1?'s':''} réponse${score>1?'s':''}</div>
+      <div class="question">${esc(q.q)}</div>${q.choix.map((o,k)=>`<button class="choix" data-k="${k}">${esc(o)}</button>`).join('')}`;
+    hydrater(z);
+    z.querySelectorAll('.choix').forEach(b=>b.onclick=()=>{
+      const k=+b.dataset.k; z.querySelectorAll('.choix').forEach(x=>x.onclick=null);
+      const juste=k===q.bon;
+      if(juste){b.classList.add('bon');score++}
+      else{b.classList.add('faux');z.querySelector(`[data-k="${q.bon}"]`).classList.add('bon');toast('Raté !')}
+      i++; garder();
+      z.querySelector('.rail b').style.width=(score/N*100)+'%';
+      z.querySelectorAll('.jalon').forEach((j,m)=>j.classList.toggle('ok',score>=P[m].s));
+      const perdu=!juste&&P.find(p=>score+(N-i)===p.s-1);       // palier qui vient de devenir impossible
+      if(perdu) setTimeout(()=>toast(`Le cadeau des ${perdu.s}/${N} s'envole…`),900);
+      if(juste&&P.find(p=>p.s===score)) toast('Cadeau débloqué !');
+      setTimeout(question,juste?1300:2300);
+    });
+  }
+  function fin(deja){
+    if(score>=N||deja||lire(cle+'-noel',false)) return noel();
+    z.innerHTML=rail()+`<div class="final">${score} / ${N}</div>`+P.map(p=>lot(p,score>=p.s)).join('');
+    setTimeout(noel,4000);
+  }
+  function noel(){
+    ecrire(cle+'-noel',true);
+    z.innerHTML=rail(true)+`<div class="final">Mais c'est Noël…<br>tu as tout gagné.</div>`+P.map(p=>lot(p,true)).join('');
+    z.querySelectorAll('.lot').forEach((l,m)=>{l.style.animation=`monte .5s ${m*.25}s both`});
+  }
+  question();
+}
+
+/* ====== Tour de mentalisme : grille de 9 photos ======
+   Positions : 1 2 3 / 4 5 6 / 7 8 9. Départ sur un coin (case « foncée » du damier).
+   Un nombre pair de pas garde la couleur, un nombre impair la change :
+   on ne retire que des photos où elle ne peut pas être. Il reste toujours la 5. */
+const ETAPES=[
+  {t:"Pose ton doigt sur l'une des quatre photos des coins, celle que tu veux. Ne me dis rien.",b:"J'y suis",retire:[]},
+  {t:"Déplace ton doigt de 2 photos : vers le haut, le bas, la gauche ou la droite. Jamais en diagonale. Tu as le droit de revenir sur tes pas.",b:"C'est fait",retire:[2]},
+  {t:"Encore 3 photos, mêmes règles. On ne passe jamais par une photo retirée.",b:"C'est fait",retire:[1,9]},
+  {t:"Maintenant, 2 photos.",b:"C'est fait",retire:[3,7]},
+  {t:"Dernière fois : 3 photos.",b:"C'est fait",retire:[4,6,8]}
+];
+function initGrille(G){
+  const z=document.getElementById('mental'), P=G.photos;
+  z.innerHTML=`<div class="mg">${P.map((p,k)=>`<div class="cel${[0,2,6,8].includes(k)?' coin':''}" id="cel${k+1}"><img alt="" data-img="${esc(p.img)}">${p.leg?`<span>${esc(p.leg)}</span>`:''}</div>`).join('')}</div><div id="consigne"></div>`;
+  hydrater(z);
+  let e=0;
+  const nom=k=>P[k-1].leg?`« ${P[k-1].leg} »`:'cette photo';
+  function etape(msg){
+    const c=document.getElementById('consigne');
+    if(!c) return;                                  // fiche fermée entre-temps
+    if(e>=ETAPES.length){
+      document.getElementById('cel5').classList.add('elue');
+      c.innerHTML=`<div class="consigne">${msg?`<div class="retrait">${esc(msg)}</div>`:''}Il ne reste qu'une photo : celle sous ton doigt.<br>Retiens-la bien. Ma prédiction est enfermée derrière la porte de demain.<button class="btn leger" id="recommencer">Recommencer le tour</button></div>`;
+      document.getElementById('recommencer').onclick=()=>initGrille(G);
+      return;
+    }
+    const s=ETAPES[e];
+    c.innerHTML=`<div class="consigne">${msg?`<div class="retrait">${esc(msg)}</div>`:''}${esc(s.t)}<button class="btn or ok" id="suivant">${esc(s.b)}</button></div>`;
+    document.getElementById('suivant').onclick=()=>{
+      if(e===0) z.querySelectorAll('.coin').forEach(x=>x.classList.remove('coin'));
+      const r=ETAPES[e].retire; e++;
+      if(!r.length) return etape('');
+      r.forEach((k,m)=>setTimeout(()=>document.getElementById('cel'+k).classList.add('parti'),m*350));
+      const noms=r.map(nom);
+      const txt=r.length===1?`Tu n'es pas sur ${noms[0]}. Je la retire.`
+        :`Tu n'es ni sur ${noms.slice(0,-1).join(', ')} ni sur ${noms[noms.length-1]}. Je les retire.`;
+      setTimeout(()=>etape(txt),r.length*350+400);
+    };
+  }
+  etape('');
+}
+
+/* ====== Démarrage ====== */
+async function entrer(mdp,silencieux){
+  const btn=document.getElementById('btnEntrer'), err=document.getElementById('erreur');
+  btn.disabled=true; btn.textContent='Ouverture…'; err.textContent='';
+  try{
+    DONNEES=await ouvrirContenu(mdp);
+    if(document.getElementById('garderMdp').checked) ecrire('mdp',mdp); else effacer('mdp');
+    demarrer();
+  }catch(e){
+    if(e.message==='mdp'){ effacer('mdp'); if(!silencieux) err.textContent="Ce n'est pas le bon mot."; }
+    else err.textContent = location.protocol==='file:' ? "Ouvre le site par son adresse web, pas comme un fichier." : "Le contenu est introuvable. Réessaie dans un instant.";
+  }finally{btn.disabled=false; btn.textContent='Entrer'}
+}
+function demarrer(){
+  document.getElementById('verrouGlobal').style.display='none';
+  document.getElementById('appli').hidden=false;
+  vues=new Set(lire('vues',[]));
+  if(DONNEES.test){
+    const sim=document.getElementById('sim'), bt=document.getElementById('barreTest');
+    bt.hidden=false; JOUR=jourReel(); sim.value=JOUR;
+    sim.oninput=()=>{JOUR=+sim.value;dessiner()};
+    document.getElementById('raz').onclick=()=>{
+      try{Object.keys(localStorage).filter(k=>k.startsWith(PREFIXE)&&k!==PREFIXE+'mdp').forEach(k=>localStorage.removeItem(k))}catch(e){}
+      vues=new Set(); dessiner(); toast('Portes, quiz et tour remis à zéro');
+    };
+  }
+  dessiner();
+  let dernier=jourCourant();
+  setInterval(()=>{const j=jourCourant(); if(j!==dernier){dernier=j;dessiner()}},30000); // passage de minuit
+}
+document.getElementById('formMdp').onsubmit=e=>{e.preventDefault();const m=document.getElementById('mdp').value;if(m.trim())entrer(m,false)};
+const memorise=lire('mdp',null); if(memorise) entrer(memorise,true);
+
+/* ====== Neige ====== */
+const cv=document.getElementById('neige'),cx=cv.getContext('2d');let fl=[];
+function taille(){cv.width=innerWidth;cv.height=innerHeight;fl=Array.from({length:Math.min(120,innerWidth/8)},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*2.2+.6,v:Math.random()*.6+.25,o:Math.random()*Math.PI*2}))}
+function anim(){cx.clearRect(0,0,cv.width,cv.height);cx.fillStyle='rgba(255,255,255,.75)';
+  fl.forEach(f=>{f.y+=f.v;f.o+=.01;f.x+=Math.sin(f.o)*.3;if(f.y>cv.height){f.y=-5;f.x=Math.random()*cv.width}
+  cx.beginPath();cx.arc(f.x,f.y,f.r,0,7);cx.fill()});requestAnimationFrame(anim)}
+addEventListener('resize',taille);taille();anim();
+</script>
+</body>
+</html>
